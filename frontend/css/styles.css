@@ -1,0 +1,107 @@
+/* ==========================================================================
+   ExamGuard — Institutional Academic Malpractice Detection System
+   Custom Global Styles & SaaS Theme Enhancements
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  --primary-navy: #0f172a;
+  --secondary-navy: #1e293b;
+  --accent-teal: #0d9488;
+  --accent-emerald: #059669;
+  --accent-rose: #e11d48;
+  --accent-amber: #d97706;
+  --brand-blue: #2563eb;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.font-mono {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Glassmorphism and Cards */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+.glass-nav {
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(51, 65, 85, 0.6);
+}
+
+/* Timeline Custom Track */
+.timeline-track {
+  height: 28px;
+  border-radius: 9999px;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  background-color: #e2e8f0;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+.timeline-segment {
+  position: relative;
+  height: 100%;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+.timeline-segment:hover {
+  filter: brightness(1.12);
+  transform: scaleY(1.1);
+  z-index: 10;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Pulsing Badge */
+@keyframes pulse-subtle {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.75; transform: scale(1.04); }
+}
+
+.live-indicator {
+  animation: pulse-subtle 2s infinite ease-in-out;
+}
+
+/* Drag and Drop Zone active state */
+.drag-active {
+  border-color: #2563eb !important;
+  background-color: #eff6ff !important;
+}
+
+/* Event Card Active State */
+.event-card-active {
+  border-color: #2563eb !important;
+  background-color: #f8fafc !important;
+  box-shadow: 0 4px 14px -1px rgba(37, 99, 235, 0.16) !important;
+}

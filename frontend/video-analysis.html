@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video Analysis — ExamGuard</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="css/styles.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0fdf4',
+              600: '#059669',
+              700: '#047857',
+              800: '#065f46',
+              900: '#064e3b',
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col font-sans antialiased">
+
+  <!-- Shared Navbar Mount Point -->
+  <div id="shared-navbar"></div>
+
+  <!-- Main Content Container -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    
+    <!-- Page Header & Academic Notice -->
+    <div class="mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b border-slate-200 pb-6">
+      <div>
+        <div class="flex items-center gap-2 mb-1.5">
+          <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800 border border-emerald-300">
+            Vision Module (MobileNetV2)
+          </span>
+          <span class="text-xs text-slate-500 font-medium">Standard Review Protocol</span>
+        </div>
+        <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">Video Behaviour Analysis</h1>
+        <p class="text-sm text-slate-600 mt-1 max-w-3xl">
+          Upload recorded examination footage to detect head turn anomalies (looking sideways) and unauthorized device presence (phone usage).
+          <strong class="text-slate-800">ExamGuard assists examiners — all flags require independent human verification.</strong>
+        </p>
+      </div>
+
+      <!-- Quick Action: Demo Sample Generator -->
+      <div class="flex items-center gap-3">
+        <button id="load-sample-btn" type="button" class="inline-flex items-center px-4 py-2 text-xs font-semibold rounded-lg bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-300 shadow-sm transition-all">
+          <svg class="w-4 h-4 mr-1.5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+          Load Sample Exam Clip (32s)
+        </button>
+      </div>
+    </div>
+
+    <!-- Client-Side Validation Alert (Hidden by default) -->
+    <div id="validation-error-alert" class="hidden mb-6 p-4 rounded-xl border border-rose-200 bg-rose-50 text-rose-800 text-sm flex items-start justify-between shadow-sm" role="alert">
+      <div class="flex items-start space-x-3">
+        <svg class="w-5 h-5 text-rose-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+        </svg>
+        <div>
+          <h4 class="font-bold text-rose-900">Upload Validation Error</h4>
+          <p id="validation-error-text" class="mt-0.5 text-rose-700 font-medium"></p>
+        </div>
+      </div>
+      <button onclick="hideValidationError()" class="text-rose-600 hover:text-rose-900">&times;</button>
+    </div>
+
+    <!-- Upload Section Card -->
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8 mb-8">
+      
+      <!-- Upload Idle State: Drag & Drop Zone -->
+      <div id="upload-idle">
+        <div id="drop-zone" class="border-2 border-dashed border-slate-300 hover:border-emerald-500 rounded-2xl p-8 sm:p-12 text-center transition-all duration-200 bg-slate-50/60 cursor-pointer">
+          <input type="file" id="video-file-input" accept=".mp4,.webm,.mov,video/mp4,video/webm,video/quicktime" class="hidden">
+          
+          <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center shadow-inner border border-emerald-100">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+            </svg>
+          </div>
+
+          <h3 id="drop-zone-text" class="text-base sm:text-lg font-bold text-slate-800">
+            Drag and drop examination video here, or <span class="text-emerald-700 underline underline-offset-2">browse files</span>
+          </h3>
+          
+          <p class="text-xs sm:text-sm text-slate-500 mt-2 max-w-md mx-auto">
+            Supported formats: <strong class="text-slate-700">MP4, WEBM, MOV</strong><br>
+            Strict institutional thresholds: <span class="font-semibold text-slate-700">Maximum 30 MB</span> • <span class="font-semibold text-slate-700">Maximum 60 seconds</span>
+          </p>
+
+          <div class="mt-6 flex flex-wrap items-center justify-center gap-3">
+            <button id="browse-btn" type="button" class="px-5 py-2.5 text-xs sm:text-sm font-semibold rounded-xl bg-slate-900 text-white hover:bg-slate-800 transition-colors shadow-sm">
+              Select Video File
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Video Preview Card (Rendered once file passes validation) -->
+      <div id="upload-preview-container" class="hidden">
+        <div class="flex flex-col lg:flex-row items-center gap-6 p-4 sm:p-6 bg-slate-50 rounded-2xl border border-slate-200">
+          
+          <!-- Video player preview -->
+          <div class="w-full lg:w-1/2 rounded-xl overflow-hidden bg-black shadow-md aspect-video flex items-center justify-center">
+            <video id="preview-video" controls class="w-full h-full object-contain"></video>
+          </div>
+
+          <!-- Metadata & Actions -->
+          <div class="w-full lg:w-1/2 flex flex-col justify-between self-stretch">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-100 text-blue-800 border border-blue-200">
+                  Ready for AI Inspection
+                </span>
+                <button id="remove-file-btn" type="button" class="text-xs text-rose-600 hover:text-rose-800 font-semibold flex items-center gap-1">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                  Remove Clip
+                </button>
+              </div>
+
+              <h4 id="file-name-display" class="text-base sm:text-lg font-bold text-slate-900 truncate">video_clip.mp4</h4>
+              <p id="file-size-display" class="text-xs sm:text-sm text-slate-500 mt-1 font-mono">14.2 MB • 32.0s duration</p>
+
+              <div class="mt-4 p-3.5 bg-white rounded-xl border border-slate-200 text-xs text-slate-600 space-y-1.5">
+                <div class="flex items-center text-emerald-700 font-semibold gap-1.5">
+                  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                  Client-side checks passed: Size &lt; 30MB, Duration &lt; 60s
+                </div>
+                <p class="text-slate-500">Video will be processed frame-by-frame. To protect student privacy, raw video is never persistently retained.</p>
+              </div>
+            </div>
+
+            <!-- Start Analysis CTA -->
+            <div class="mt-6 pt-4 border-t border-slate-200 flex items-center justify-end gap-3">
+              <button id="analyze-btn" type="button" class="w-full sm:w-auto px-6 py-3 text-sm font-bold rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+                Analyse Video Footage
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Loading Spinner & Step Progress (Hidden during idle) -->
+    <div id="analysis-loading-overlay" class="hidden mb-8 p-12 bg-white rounded-2xl border border-slate-200 shadow-md text-center">
+      <div class="inline-block relative w-16 h-16 mb-4">
+        <svg class="animate-spin w-16 h-16 text-emerald-600" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-20" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3"></circle>
+          <path class="opacity-90" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+        </svg>
+      </div>
+      <h3 class="text-lg font-bold text-slate-900">Analysing Examination Footage</h3>
+      <p id="loading-step-text" class="text-sm text-slate-600 mt-2 font-medium">Sampling 1 frame per second for head pose and mobile devices...</p>
+      <div class="mt-4 inline-flex items-center px-3 py-1 rounded-full text-xs bg-slate-100 text-slate-600 border border-slate-200">
+        Demo Simulation Active • MobileNetV2 Prototype
+      </div>
+    </div>
+
+    <!-- Results Section (Hidden until analysis runs) -->
+    <div id="results-section" class="hidden space-y-8">
+      
+      <!-- Mock Data / Demo Mode Institutional Alert -->
+      <div id="mock-data-banner" class="p-4 rounded-xl border border-amber-300 bg-amber-50 text-amber-900 text-xs sm:text-sm flex items-start gap-3 shadow-sm">
+        <svg class="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        <div>
+          <strong class="font-bold">MOCK DATA / DEMO MODE:</strong>
+          <span>
+            These findings are synthesized for frontend and examiner workflow validation on Day 1.
+            Actual MobileNetV2 inference will be wired during Day 2 backend integration.
+            ExamGuard strictly flags timestamps for human audit and does not assign guilt.
+          </span>
+        </div>
+      </div>
+
+      <!-- Analysis KPI Cards Grid -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+          <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Frames Analysed</p>
+          <p id="stat-frames" class="text-2xl font-extrabold text-slate-900 mt-1 font-mono">32</p>
+          <span class="text-[11px] text-slate-400">1 frame/sec rate</span>
+        </div>
+
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+          <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Normal Behaviour</p>
+          <p id="stat-normal-pct" class="text-2xl font-extrabold text-emerald-600 mt-1 font-mono">78.1%</p>
+          <span class="text-[11px] text-slate-400">Baseline candidate posture</span>
+        </div>
+
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+          <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Flagged Events</p>
+          <p id="stat-flagged-count" class="text-2xl font-extrabold text-rose-600 mt-1 font-mono">2</p>
+          <span class="text-[11px] text-slate-400">Require examiner review</span>
+        </div>
+
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+          <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Clip Duration</p>
+          <p id="stat-duration" class="text-2xl font-extrabold text-slate-900 mt-1 font-mono">32.0s</p>
+          <span class="text-[11px] text-slate-400">Session ID: #1042</span>
+        </div>
+      </div>
+
+      <!-- Synchronized Video Player & Timeline Card -->
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <h3 class="text-lg font-bold text-slate-900">Synchronized Video Inspection</h3>
+            <p class="text-xs text-slate-500">Video player synchronizes directly with timeline segments and flagged event cards.</p>
+          </div>
+          <span class="text-xs font-mono font-medium text-slate-500 bg-slate-100 px-2.5 py-1 rounded-md">
+            Interactive Seeking Active
+          </span>
+        </div>
+
+        <!-- Video Player -->
+        <div class="max-w-3xl mx-auto rounded-xl overflow-hidden bg-black shadow-lg aspect-video mb-6">
+          <video id="results-video-player" controls class="w-full h-full object-contain"></video>
+        </div>
+
+        <!-- Coloured Timeline -->
+        <div class="mt-6">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2.5">
+            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-700">Behavioural Timeline</h4>
+            <!-- Timeline Legend -->
+            <div class="flex items-center flex-wrap gap-4 text-xs font-medium">
+              <span class="flex items-center gap-1.5 text-slate-700">
+                <span class="w-3 h-3 rounded-full bg-emerald-500"></span> Normal Behaviour
+              </span>
+              <span class="flex items-center gap-1.5 text-slate-700">
+                <span class="w-3 h-3 rounded-full bg-amber-500"></span> Looking Sideways
+              </span>
+              <span class="flex items-center gap-1.5 text-slate-700">
+                <span class="w-3 h-3 rounded-full bg-rose-500"></span> Phone Usage
+              </span>
+            </div>
+          </div>
+
+          <!-- Timeline Track Bar -->
+          <div class="timeline-track" id="timeline-bar">
+            <!-- Dynamic segments injected by video-analysis.js -->
+          </div>
+
+          <!-- Time Ticks -->
+          <div class="flex justify-between mt-1.5 px-1" id="timeline-ticks">
+            <!-- Dynamic tick labels injected by video-analysis.js -->
+          </div>
+
+          <p class="text-center text-[11px] text-slate-400 mt-2">
+            💡 Click any colored block on the timeline to seek the video player to that timestamp.
+          </p>
+        </div>
+      </div>
+
+      <!-- Flagged Events Review Section -->
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8">
+        <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-200">
+          <div>
+            <h3 class="text-lg font-bold text-slate-900">Flagged Events for Examiner Audit</h3>
+            <p class="text-xs text-slate-500">Click any card to play that moment. Review candidates objectively and choose Confirm or Dismiss.</p>
+          </div>
+          <span class="text-xs font-semibold text-slate-600 bg-slate-100 px-3 py-1 rounded-full border border-slate-200">
+            2 Events Pending
+          </span>
+        </div>
+
+        <!-- Event List Container -->
+        <div id="flagged-events-container">
+          <!-- Dynamically populated cards injected by video-analysis.js -->
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Institutional Footer -->
+  <footer class="bg-white border-t border-slate-200 py-6 mt-12 text-center text-xs text-slate-500">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+      <p>&copy; 2026 ExamGuard Institutional Suite • Team Project G2</p>
+      <p class="text-[11px] text-slate-400">Strictly adheres to UGC Academic Integrity Regulations & India DPDP Act 2023 Principles.</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/config.js"></script>
+  <script src="js/navbar.js"></script>
+  <script src="js/video-analysis.js"></script>
+</body>
+</html>

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Examiner Dashboard — ExamGuard</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col font-sans antialiased">
+
+  <!-- Shared Navbar -->
+  <div id="shared-navbar"></div>
+
+  <!-- Main Container -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    
+    <!-- Welcome Header -->
+    <div class="mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b border-slate-200 pb-6">
+      <div>
+        <div class="flex items-center gap-2 mb-1.5">
+          <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800 border border-emerald-300">
+            Examiner Console Active
+          </span>
+          <span class="text-xs text-slate-500 font-medium">Academic Session 2026</span>
+        </div>
+        <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">Integrity Oversight Dashboard</h1>
+        <p class="text-sm text-slate-600 mt-1">
+          Review recent video and textual examination audits, monitor suspicious event distributions, and manage case dispositions.
+        </p>
+      </div>
+
+      <!-- Quick Action Buttons -->
+      <div class="flex flex-wrap items-center gap-3">
+        <a href="video-analysis.html" class="inline-flex items-center px-4 py-2.5 text-xs sm:text-sm font-bold rounded-xl bg-slate-900 hover:bg-slate-800 text-white shadow-sm transition-all">
+          <svg class="w-4 h-4 mr-2 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+          New Video Analysis
+        </a>
+        <a href="text-analysis.html" class="inline-flex items-center px-4 py-2.5 text-xs sm:text-sm font-semibold rounded-xl bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 shadow-sm transition-all">
+          <svg class="w-4 h-4 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+          Batch Text Check
+        </a>
+      </div>
+    </div>
+
+    <!-- Metrics Cards Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
+      
+      <!-- Total Sessions -->
+      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+        <div>
+          <p class="text-xs font-bold text-slate-500 uppercase tracking-wider">Total Sessions</p>
+          <p class="text-3xl font-extrabold text-slate-900 mt-1 font-mono">18</p>
+          <p class="text-xs text-slate-400 mt-1">12 Video • 6 Text Batches</p>
+        </div>
+        <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+        </div>
+      </div>
+
+      <!-- Total Flagged Events -->
+      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+        <div>
+          <p class="text-xs font-bold text-slate-500 uppercase tracking-wider">Flagged Events</p>
+          <p class="text-3xl font-extrabold text-amber-600 mt-1 font-mono">42</p>
+          <p class="text-xs text-slate-400 mt-1">Requires manual audit</p>
+        </div>
+        <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+        </div>
+      </div>
+
+      <!-- Confirmed Events -->
+      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+        <div>
+          <p class="text-xs font-bold text-slate-500 uppercase tracking-wider">Confirmed Malpractice</p>
+          <p class="text-3xl font-extrabold text-rose-600 mt-1 font-mono">9</p>
+          <p class="text-xs text-slate-400 mt-1">Escalated to Disciplinary Board</p>
+        </div>
+        <div class="w-12 h-12 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        </div>
+      </div>
+
+      <!-- Dismissed / False Positives -->
+      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+        <div>
+          <p class="text-xs font-bold text-slate-500 uppercase tracking-wider">Dismissed / Benign</p>
+          <p class="text-3xl font-extrabold text-emerald-600 mt-1 font-mono">27</p>
+          <p class="text-xs text-slate-400 mt-1">Benign gestures / false alarms</p>
+        </div>
+        <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Recent Audits & Integrity Ratio Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+      
+      <!-- Recent Activity Table (2 columns wide) -->
+      <div class="lg:col-span-2 bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+        <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
+          <div>
+            <h3 class="text-base font-bold text-slate-900">Recent Examination Audits</h3>
+            <p class="text-xs text-slate-500">Latest automated behavioral and similarity inspection sessions</p>
+          </div>
+          <a href="history.html" class="text-xs font-semibold text-emerald-700 hover:text-emerald-800">
+            View All History &rarr;
+          </a>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs text-slate-600">
+            <thead class="bg-slate-50 text-slate-500 uppercase font-semibold border-y border-slate-200">
+              <tr>
+                <th class="py-2.5 px-3">Session ID</th>
+                <th class="py-2.5 px-3">Examination / Clip Title</th>
+                <th class="py-2.5 px-3">Modality</th>
+                <th class="py-2.5 px-3">Events</th>
+                <th class="py-2.5 px-3">Status</th>
+                <th class="py-2.5 px-3 text-right">Action</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+              <tr class="hover:bg-slate-50/80 transition-colors">
+                <td class="py-3 px-3 font-mono font-bold text-slate-900">#SES-1042</td>
+                <td class="py-3 px-3 font-medium text-slate-800">exam_hall_camera_candidate_04.mp4</td>
+                <td class="py-3 px-3"><span class="px-2 py-0.5 rounded bg-purple-50 text-purple-700 font-semibold border border-purple-200">Video</span></td>
+                <td class="py-3 px-3 font-semibold text-rose-600">2 flagged</td>
+                <td class="py-3 px-3"><span class="px-2 py-0.5 rounded text-[11px] font-bold bg-amber-50 text-amber-700 border border-amber-200">Pending Review</span></td>
+                <td class="py-3 px-3 text-right">
+                  <a href="video-analysis.html" class="text-emerald-700 font-bold hover:underline">Inspect</a>
+                </td>
+              </tr>
+
+              <tr class="hover:bg-slate-50/80 transition-colors">
+                <td class="py-3 px-3 font-mono font-bold text-slate-900">#SES-1041</td>
+                <td class="py-3 px-3 font-medium text-slate-800">Midterm_CS302_SectionB_Answers.csv</td>
+                <td class="py-3 px-3"><span class="px-2 py-0.5 rounded bg-blue-50 text-blue-700 font-semibold border border-blue-200">Text</span></td>
+                <td class="py-3 px-3 font-semibold text-amber-600">3 pairs</td>
+                <td class="py-3 px-3"><span class="px-2 py-0.5 rounded text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">Audited</span></td>
+                <td class="py-3 px-3 text-right">
+                  <a href="text-analysis.html" class="text-emerald-700 font-bold hover:underline">Inspect</a>
+                </td>
+              </tr>
+
+              <tr class="hover:bg-slate-50/80 transition-colors">
+                <td class="py-3 px-3 font-mono font-bold text-slate-900">#SES-1040</td>
+                <td class="py-3 px-3 font-medium text-slate-800">candidate_desk_cam_12.webm</td>
+                <td class="py-3 px-3"><span class="px-2 py-0.5 rounded bg-purple-50 text-purple-700 font-semibold border border-purple-200">Video</span></td>
+                <td class="py-3 px-3 font-semibold text-slate-400">0 flagged</td>
+                <td class="py-3 px-3"><span class="px-2 py-0.5 rounded text-[11px] font-bold bg-slate-100 text-slate-600 border border-slate-200">Cleared</span></td>
+                <td class="py-3 px-3 text-right">
+                  <a href="history.html" class="text-slate-500 font-medium hover:underline">Log</a>
+                </td>
+              </tr>
+
+              <tr class="hover:bg-slate-50/80 transition-colors">
+                <td class="py-3 px-3 font-mono font-bold text-slate-900">#SES-1039</td>
+                <td class="py-3 px-3 font-medium text-slate-800">Operating_Systems_Final_Q4.csv</td>
+                <td class="py-3 px-3"><span class="px-2 py-0.5 rounded bg-blue-50 text-blue-700 font-semibold border border-blue-200">Text</span></td>
+                <td class="py-3 px-3 font-semibold text-rose-600">5 pairs</td>
+                <td class="py-3 px-3"><span class="px-2 py-0.5 rounded text-[11px] font-bold bg-rose-50 text-rose-700 border border-rose-200">Confirmed (2)</span></td>
+                <td class="py-3 px-3 text-right">
+                  <a href="history.html" class="text-emerald-700 font-bold hover:underline">Inspect</a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Legal Compliance & Fairness Card (1 column wide) -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center space-x-2 text-emerald-700 font-bold text-sm mb-3">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+            <span>Examiner Due-Process</span>
+          </div>
+
+          <h4 class="text-sm font-bold text-slate-900 mb-2">Non-Accusatory Protocol</h4>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            In accordance with Indian university guidelines and academic due process, ExamGuard operates strictly as an investigative aid. 
+            <strong class="text-slate-800">Confidence scores represent behavioral correlation, never definitive guilt.</strong>
+          </p>
+
+          <div class="mt-4 p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-2 text-xs text-slate-500">
+            <div class="flex justify-between">
+              <span>Examiner Confirmations:</span>
+              <span class="font-bold text-slate-800">25.0%</span>
+            </div>
+            <div class="flex justify-between">
+              <span>Benign Dismissals:</span>
+              <span class="font-bold text-emerald-600">75.0%</span>
+            </div>
+            <div class="w-full bg-slate-200 h-2 rounded-full overflow-hidden flex">
+              <div class="bg-rose-500 h-full" style="width: 25%"></div>
+              <div class="bg-emerald-500 h-full" style="width: 75%"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-6 pt-4 border-t border-slate-100 text-[11px] text-slate-400">
+          UGC Regulations 2018 & DPDP Act 2023 Principles Applied
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Institutional Footer -->
+  <footer class="bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-500">
+    ExamGuard Institutional Review Suite • Day 1 Deliverable
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/navbar.js"></script>
+</body>
+</html>

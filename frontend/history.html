@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Audit History — ExamGuard</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col font-sans antialiased">
+
+  <!-- Shared Navbar -->
+  <div id="shared-navbar"></div>
+
+  <!-- Main Container -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    
+    <!-- Header -->
+    <div class="mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b border-slate-200 pb-6">
+      <div>
+        <div class="flex items-center gap-2 mb-1.5">
+          <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-200 text-slate-700">
+            Immutable Audit Trail
+          </span>
+          <span class="text-xs text-slate-500 font-medium">DPDP Act 2023 Compliant Logs</span>
+        </div>
+        <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">Examination Audit History</h1>
+        <p class="text-sm text-slate-600 mt-1 max-w-3xl">
+          Historical record of all video behavioral classifications and semantic text comparisons.
+          Summary metadata and examiner dispositions are stored without raw student media.
+        </p>
+      </div>
+
+      <!-- Export / Filter -->
+      <div class="flex items-center gap-3">
+        <button type="button" onclick="alert('Audit trail export generated in CSV format (Demo Mode).')" class="px-4 py-2 text-xs font-semibold rounded-lg bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 shadow-sm transition-all flex items-center gap-1.5">
+          <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+          Export Audit Log
+        </button>
+      </div>
+    </div>
+
+    <!-- Filter & Search Toolbar -->
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 mb-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-2 w-full sm:w-auto">
+        <span class="text-xs font-bold text-slate-500 uppercase">Filter Modality:</span>
+        <button id="filter-all" class="px-3 py-1 rounded-lg text-xs font-bold bg-slate-900 text-white">All</button>
+        <button id="filter-video" class="px-3 py-1 rounded-lg text-xs font-medium bg-slate-100 text-slate-700 hover:bg-slate-200">Video</button>
+        <button id="filter-text" class="px-3 py-1 rounded-lg text-xs font-medium bg-slate-100 text-slate-700 hover:bg-slate-200">Text</button>
+      </div>
+
+      <div class="text-xs text-slate-400">
+        Displaying 5 of 18 total sessions (Demo Data)
+      </div>
+    </div>
+
+    <!-- History Table Card -->
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs text-slate-600">
+          <thead class="bg-slate-50 text-slate-500 uppercase font-semibold border-b border-slate-200">
+            <tr>
+              <th class="py-3.5 px-4">Session ID</th>
+              <th class="py-3.5 px-4">Timestamp (UTC)</th>
+              <th class="py-3.5 px-4">Type</th>
+              <th class="py-3.5 px-4">Assessment / File</th>
+              <th class="py-3.5 px-4">Flagged Events</th>
+              <th class="py-3.5 px-4">Review Status</th>
+              <th class="py-3.5 px-4 text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+            
+            <!-- Row 1 -->
+            <tr class="hover:bg-slate-50/80 transition-colors">
+              <td class="py-4 px-4 font-mono font-bold text-slate-900">#SES-1042</td>
+              <td class="py-4 px-4 text-slate-600 font-mono">2026-11-11 14:22</td>
+              <td class="py-4 px-4"><span class="px-2.5 py-1 rounded-full bg-purple-50 text-purple-700 font-bold border border-purple-200">Video</span></td>
+              <td class="py-4 px-4 font-medium text-slate-800">exam_hall_camera_candidate_04.mp4</td>
+              <td class="py-4 px-4 font-bold text-rose-600">2 events (Phone, Sideways)</td>
+              <td class="py-4 px-4"><span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-50 text-amber-700 border border-amber-200">Pending Review</span></td>
+              <td class="py-4 px-4 text-right">
+                <a href="video-analysis.html" class="inline-flex items-center px-3 py-1 rounded-lg text-xs font-bold bg-slate-900 text-white hover:bg-slate-800 shadow-sm">
+                  View Details &rarr;
+                </a>
+              </td>
+            </tr>
+
+            <!-- Row 2 -->
+            <tr class="hover:bg-slate-50/80 transition-colors">
+              <td class="py-4 px-4 font-mono font-bold text-slate-900">#SES-1041</td>
+              <td class="py-4 px-4 text-slate-600 font-mono">2026-11-11 11:05</td>
+              <td class="py-4 px-4"><span class="px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 font-bold border border-blue-200">Text</span></td>
+              <td class="py-4 px-4 font-medium text-slate-800">Midterm_CS302_SectionB_Answers.csv</td>
+              <td class="py-4 px-4 font-semibold text-amber-600">3 pairs (1 High, 2 Low)</td>
+              <td class="py-4 px-4"><span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">Examiner Verified</span></td>
+              <td class="py-4 px-4 text-right">
+                <a href="text-analysis.html" class="inline-flex items-center px-3 py-1 rounded-lg text-xs font-bold bg-white text-slate-700 border border-slate-300 hover:bg-slate-50 shadow-sm">
+                  View Details &rarr;
+                </a>
+              </td>
+            </tr>
+
+            <!-- Row 3 -->
+            <tr class="hover:bg-slate-50/80 transition-colors">
+              <td class="py-4 px-4 font-mono font-bold text-slate-900">#SES-1040</td>
+              <td class="py-4 px-4 text-slate-600 font-mono">2026-11-10 16:48</td>
+              <td class="py-4 px-4"><span class="px-2.5 py-1 rounded-full bg-purple-50 text-purple-700 font-bold border border-purple-200">Video</span></td>
+              <td class="py-4 px-4 font-medium text-slate-800">candidate_desk_cam_12.webm</td>
+              <td class="py-4 px-4 font-semibold text-slate-400">0 events</td>
+              <td class="py-4 px-4"><span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-slate-100 text-slate-600 border border-slate-200">Cleared / Normal</span></td>
+              <td class="py-4 px-4 text-right">
+                <span class="text-xs text-slate-400 font-medium">Archived</span>
+              </td>
+            </tr>
+
+            <!-- Row 4 -->
+            <tr class="hover:bg-slate-50/80 transition-colors">
+              <td class="py-4 px-4 font-mono font-bold text-slate-900">#SES-1039</td>
+              <td class="py-4 px-4 text-slate-600 font-mono">2026-11-10 13:14</td>
+              <td class="py-4 px-4"><span class="px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 font-bold border border-blue-200">Text</span></td>
+              <td class="py-4 px-4 font-medium text-slate-800">Operating_Systems_Final_Q4.csv</td>
+              <td class="py-4 px-4 font-bold text-rose-600">5 pairs flagged</td>
+              <td class="py-4 px-4"><span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-rose-50 text-rose-700 border border-rose-200">2 Confirmed</span></td>
+              <td class="py-4 px-4 text-right">
+                <a href="text-analysis.html" class="inline-flex items-center px-3 py-1 rounded-lg text-xs font-bold bg-white text-slate-700 border border-slate-300 hover:bg-slate-50 shadow-sm">
+                  View Details &rarr;
+                </a>
+              </td>
+            </tr>
+
+            <!-- Row 5 -->
+            <tr class="hover:bg-slate-50/80 transition-colors">
+              <td class="py-4 px-4 font-mono font-bold text-slate-900">#SES-1038</td>
+              <td class="py-4 px-4 text-slate-600 font-mono">2026-11-09 09:30</td>
+              <td class="py-4 px-4"><span class="px-2.5 py-1 rounded-full bg-purple-50 text-purple-700 font-bold border border-purple-200">Video</span></td>
+              <td class="py-4 px-4 font-medium text-slate-800">lab_assessment_terminal_08.mov</td>
+              <td class="py-4 px-4 font-semibold text-amber-600">1 event (Looking Sideways)</td>
+              <td class="py-4 px-4"><span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-slate-100 text-slate-600 border border-slate-200">Dismissed (Benign)</span></td>
+              <td class="py-4 px-4 text-right">
+                <a href="video-analysis.html" class="inline-flex items-center px-3 py-1 rounded-lg text-xs font-bold bg-white text-slate-700 border border-slate-300 hover:bg-slate-50 shadow-sm">
+                  View Details &rarr;
+                </a>
+              </td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Institutional Footer -->
+  <footer class="bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-500">
+    ExamGuard Institutional Review Suite • Day 1 Deliverable
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/navbar.js"></script>
+</body>
+</html>

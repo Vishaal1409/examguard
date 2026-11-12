@@ -1,0 +1,580 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "ExamGuard API",
+    "version": "0.1.0-dummy"
+  },
+  "paths": {
+    "/health": {
+      "get": {
+        "tags": [
+          "system"
+        ],
+        "summary": "Health",
+        "operationId": "health_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/register": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Register",
+        "operationId": "register_register_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Credentials"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/login": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Login",
+        "operationId": "login_login_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Credentials"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/analyze-video": {
+      "post": {
+        "tags": [
+          "video"
+        ],
+        "summary": "Analyze Video",
+        "operationId": "analyze_video_analyze_video_post",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_analyze_video_analyze_video_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VideoAnalysisOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/analyze-text": {
+      "post": {
+        "tags": [
+          "text"
+        ],
+        "summary": "Analyze Text",
+        "operationId": "analyze_text_analyze_text_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TextRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TextAnalysisOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Body_analyze_video_analyze_video_post": {
+        "properties": {
+          "file": {
+            "type": "string",
+            "contentMediaType": "application/octet-stream",
+            "title": "File"
+          }
+        },
+        "type": "object",
+        "required": [
+          "file"
+        ],
+        "title": "Body_analyze_video_analyze_video_post"
+      },
+      "Credentials": {
+        "properties": {
+          "email": {
+            "type": "string",
+            "maxLength": 120,
+            "minLength": 5,
+            "title": "Email"
+          },
+          "password": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 8,
+            "title": "Password"
+          }
+        },
+        "type": "object",
+        "required": [
+          "email",
+          "password"
+        ],
+        "title": "Credentials"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "SentenceMatch": {
+        "properties": {
+          "a_sentence": {
+            "type": "string",
+            "title": "A Sentence"
+          },
+          "b_sentence": {
+            "type": "string",
+            "title": "B Sentence"
+          },
+          "score": {
+            "type": "number",
+            "title": "Score"
+          }
+        },
+        "type": "object",
+        "required": [
+          "a_sentence",
+          "b_sentence",
+          "score"
+        ],
+        "title": "SentenceMatch"
+      },
+      "Submission": {
+        "properties": {
+          "student_id": {
+            "type": "string",
+            "maxLength": 50,
+            "minLength": 1,
+            "title": "Student Id"
+          },
+          "answer": {
+            "type": "string",
+            "maxLength": 3000,
+            "title": "Answer"
+          }
+        },
+        "type": "object",
+        "required": [
+          "student_id",
+          "answer"
+        ],
+        "title": "Submission"
+      },
+      "TextAnalysisOut": {
+        "properties": {
+          "session_id": {
+            "type": "integer",
+            "title": "Session Id"
+          },
+          "pairs": {
+            "items": {
+              "$ref": "#/components/schemas/TextPair"
+            },
+            "type": "array",
+            "title": "Pairs"
+          },
+          "skipped": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Skipped"
+          }
+        },
+        "type": "object",
+        "required": [
+          "session_id",
+          "pairs",
+          "skipped"
+        ],
+        "title": "TextAnalysisOut"
+      },
+      "TextPair": {
+        "properties": {
+          "student_a": {
+            "type": "string",
+            "title": "Student A"
+          },
+          "student_b": {
+            "type": "string",
+            "title": "Student B"
+          },
+          "similarity": {
+            "type": "number",
+            "title": "Similarity"
+          },
+          "risk": {
+            "type": "string",
+            "title": "Risk"
+          },
+          "matches": {
+            "items": {
+              "$ref": "#/components/schemas/SentenceMatch"
+            },
+            "type": "array",
+            "title": "Matches"
+          }
+        },
+        "type": "object",
+        "required": [
+          "student_a",
+          "student_b",
+          "similarity",
+          "risk",
+          "matches"
+        ],
+        "title": "TextPair"
+      },
+      "TextRequest": {
+        "properties": {
+          "title": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 120
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title"
+          },
+          "submissions": {
+            "items": {
+              "$ref": "#/components/schemas/Submission"
+            },
+            "type": "array",
+            "maxItems": 200,
+            "minItems": 2,
+            "title": "Submissions"
+          }
+        },
+        "type": "object",
+        "required": [
+          "submissions"
+        ],
+        "title": "TextRequest"
+      },
+      "TimelinePoint": {
+        "properties": {
+          "t": {
+            "type": "integer",
+            "title": "T"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "confidence": {
+            "type": "number",
+            "title": "Confidence"
+          }
+        },
+        "type": "object",
+        "required": [
+          "t",
+          "label",
+          "confidence"
+        ],
+        "title": "TimelinePoint"
+      },
+      "TokenOut": {
+        "properties": {
+          "access_token": {
+            "type": "string",
+            "title": "Access Token"
+          },
+          "token_type": {
+            "type": "string",
+            "title": "Token Type",
+            "default": "bearer"
+          }
+        },
+        "type": "object",
+        "required": [
+          "access_token"
+        ],
+        "title": "TokenOut"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      },
+      "VideoAnalysisOut": {
+        "properties": {
+          "session_id": {
+            "type": "integer",
+            "title": "Session Id"
+          },
+          "duration_s": {
+            "type": "number",
+            "title": "Duration S"
+          },
+          "frames_analyzed": {
+            "type": "integer",
+            "title": "Frames Analyzed"
+          },
+          "timeline": {
+            "items": {
+              "$ref": "#/components/schemas/TimelinePoint"
+            },
+            "type": "array",
+            "title": "Timeline"
+          },
+          "events": {
+            "items": {
+              "$ref": "#/components/schemas/VideoEvent"
+            },
+            "type": "array",
+            "title": "Events"
+          },
+          "summary": {
+            "$ref": "#/components/schemas/VideoSummary"
+          }
+        },
+        "type": "object",
+        "required": [
+          "session_id",
+          "duration_s",
+          "frames_analyzed",
+          "timeline",
+          "events",
+          "summary"
+        ],
+        "title": "VideoAnalysisOut"
+      },
+      "VideoEvent": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "start_s": {
+            "type": "number",
+            "title": "Start S"
+          },
+          "end_s": {
+            "type": "number",
+            "title": "End S"
+          },
+          "confidence": {
+            "type": "number",
+            "title": "Confidence"
+          },
+          "risk": {
+            "type": "string",
+            "title": "Risk"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "label",
+          "start_s",
+          "end_s",
+          "confidence",
+          "risk"
+        ],
+        "title": "VideoEvent"
+      },
+      "VideoSummary": {
+        "properties": {
+          "normal_pct": {
+            "type": "number",
+            "title": "Normal Pct"
+          },
+          "n_events": {
+            "type": "integer",
+            "title": "N Events"
+          }
+        },
+        "type": "object",
+        "required": [
+          "normal_pct",
+          "n_events"
+        ],
+        "title": "VideoSummary"
+      }
+    },
+    "securitySchemes": {
+      "HTTPBearer": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  }
+}

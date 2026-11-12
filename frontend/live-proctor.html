@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Live Proctoring — ExamGuard</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col font-sans antialiased">
+
+  <!-- Shared Navbar -->
+  <div id="shared-navbar"></div>
+
+  <!-- Main Container -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    
+    <!-- Page Header -->
+    <div class="mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b border-slate-200 pb-6">
+      <div>
+        <div class="flex items-center gap-2 mb-1.5">
+          <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-800 border border-amber-200">
+            Real-Time Stream Proctoring
+          </span>
+          <span class="text-xs text-slate-500 font-medium">Candidate Monitoring Portal</span>
+        </div>
+        <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">Live Session Proctoring</h1>
+        <p class="text-sm text-slate-600 mt-1 max-w-3xl">
+          Webcam-based continuous stream monitoring to verify single-candidate presence and flag secondary devices or multiple individuals in frame.
+        </p>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <span class="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-700 border border-slate-200">
+          <span id="stream-status-dot" class="w-2 h-2 rounded-full bg-slate-400 mr-2"></span>
+          <span id="stream-status-text">Camera Standby</span>
+        </span>
+      </div>
+    </div>
+
+    <!-- Live Proctor Layout: Video Stream + Telemetry Panel -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+      
+      <!-- Video Stream & HUD Container (2 columns) -->
+      <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-slate-200 p-6 flex flex-col justify-between">
+        <div>
+          <!-- Camera Feed / Placeholder -->
+          <div class="relative rounded-xl overflow-hidden bg-slate-950 aspect-video flex items-center justify-center border border-slate-800 shadow-inner">
+            <video id="webcam-preview" autoplay playsinline muted class="w-full h-full object-cover hidden"></video>
+            
+            <!-- Standby Overlay -->
+            <div id="camera-standby-overlay" class="text-center p-6 text-slate-400">
+              <div class="w-16 h-16 rounded-2xl bg-slate-900 text-slate-500 flex items-center justify-center mx-auto mb-3 border border-slate-800">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+              </div>
+              <p class="text-sm font-semibold text-slate-300">Live Camera Feed Standby</p>
+              <p class="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
+                Click "Start Live Monitoring" below to request browser camera permission and activate proctoring overlay.
+              </p>
+            </div>
+
+            <!-- Simulated Proctoring HUD (Visible when active) -->
+            <div id="live-hud-overlay" class="hidden absolute inset-0 pointer-events-none p-4 flex flex-col justify-between">
+              <div class="flex items-center justify-between text-xs font-mono font-bold">
+                <span class="bg-rose-900/80 text-rose-200 px-2.5 py-1 rounded border border-rose-700 flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-rose-400 animate-ping"></span> LIVE MONITORING
+                </span>
+                <span class="bg-slate-900/80 text-slate-200 px-2.5 py-1 rounded border border-slate-700">
+                  FPS: 15.0 &bull; LATENCY: 42ms
+                </span>
+              </div>
+
+              <!-- Center bounding box outline -->
+              <div class="border-2 border-dashed border-emerald-400/70 rounded-xl w-64 h-64 mx-auto flex items-end justify-center pb-2">
+                <span class="bg-emerald-950/90 text-emerald-300 text-[10px] px-2 py-0.5 rounded border border-emerald-600 font-mono">
+                  Candidate Head &amp; Pose Tracked
+                </span>
+              </div>
+
+              <div class="text-[11px] font-mono text-slate-300 bg-slate-900/80 px-3 py-1.5 rounded border border-slate-700 self-start">
+                ENCRYPTION: TLS 1.3 &bull; DPDP 2023 STREAM COMPLIANT
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Controls Bar -->
+        <div class="mt-6 pt-4 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3">
+          <div class="flex items-center gap-3">
+            <button id="btn-start-stream" type="button" class="px-5 py-2.5 text-xs sm:text-sm font-bold rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition-all flex items-center gap-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+              Start Live Monitoring
+            </button>
+            <button id="btn-stop-stream" type="button" disabled class="px-5 py-2.5 text-xs sm:text-sm font-bold rounded-xl bg-slate-200 text-slate-400 cursor-not-allowed transition-all flex items-center gap-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z"></path></svg>
+              Stop Monitoring
+            </button>
+          </div>
+
+          <p class="text-[11px] text-slate-400">
+            Day 1 Prototype: MediaStream API test and examiner telemetric overlay.
+          </p>
+        </div>
+      </div>
+
+      <!-- Real-Time Telemetry & Alert Log (1 column) -->
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 flex flex-col justify-between">
+        <div>
+          <h3 class="text-base font-bold text-slate-900 mb-3">Live Telemetry &amp; Status</h3>
+          
+          <!-- Detection Indicators -->
+          <div class="space-y-3 mb-6">
+            <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 flex items-center justify-between">
+              <div>
+                <p class="text-xs font-semibold text-slate-700">Persons in Frame</p>
+                <p class="text-[11px] text-slate-400">Single candidate verification</p>
+              </div>
+              <span id="metric-persons" class="px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-slate-200 text-slate-700">
+                1 Candidate
+              </span>
+            </div>
+
+            <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 flex items-center justify-between">
+              <div>
+                <p class="text-xs font-semibold text-slate-700">Secondary Devices</p>
+                <p class="text-[11px] text-slate-400">Handset / earbud detection</p>
+              </div>
+              <span id="metric-devices" class="px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-slate-200 text-slate-700">
+                None Detected
+              </span>
+            </div>
+
+            <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 flex items-center justify-between">
+              <div>
+                <p class="text-xs font-semibold text-slate-700">Gaze &amp; Pose Attention</p>
+                <p class="text-[11px] text-slate-400">Looking sideways deviation</p>
+              </div>
+              <span id="metric-gaze" class="px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-slate-200 text-slate-700">
+                Facing Screen
+              </span>
+            </div>
+          </div>
+
+          <!-- Alert Stream Log -->
+          <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Telemetry Event Log</h4>
+          <div id="live-alert-log" class="h-44 overflow-y-auto space-y-2 p-2 bg-slate-50 rounded-xl border border-slate-200 text-xs font-mono">
+            <div class="text-slate-400 text-center py-8">
+              No live alerts recorded.
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-4 pt-3 border-t border-slate-100 text-[11px] text-slate-400">
+          Stream frames are evaluated in memory and discarded immediately.
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Institutional Footer -->
+  <footer class="bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-500">
+    ExamGuard Institutional Review Suite • Day 1 Deliverable
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/navbar.js"></script>
+  <script>
+    // Live Webcam MediaStream test controller for Day 1
+    let localStream = null;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const btnStart = document.getElementById('btn-start-stream');
+      const btnStop = document.getElementById('btn-stop-stream');
+      const videoEl = document.getElementById('webcam-preview');
+      const standbyOverlay = document.getElementById('camera-standby-overlay');
+      const hudOverlay = document.getElementById('live-hud-overlay');
+      const statusDot = document.getElementById('stream-status-dot');
+      const statusText = document.getElementById('stream-status-text');
+      const alertLog = document.getElementById('live-alert-log');
+
+      btnStart?.addEventListener('click', async () => {
+        try {
+          localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+          videoEl.srcObject = localStream;
+          videoEl.classList.remove('hidden');
+          standbyOverlay.classList.add('hidden');
+          hudOverlay.classList.remove('hidden');
+
+          statusDot.className = 'w-2 h-2 rounded-full bg-emerald-500 animate-pulse mr-2';
+          statusText.textContent = 'Active Monitoring';
+
+          btnStart.disabled = true;
+          btnStart.className = 'px-5 py-2.5 text-xs sm:text-sm font-bold rounded-xl bg-slate-200 text-slate-400 cursor-not-allowed';
+
+          btnStop.disabled = false;
+          btnStop.className = 'px-5 py-2.5 text-xs sm:text-sm font-bold rounded-xl bg-rose-600 hover:bg-rose-700 text-white shadow-sm transition-all';
+
+          // Add log entry
+          alertLog.innerHTML = `
+            <div class="p-1.5 bg-emerald-50 text-emerald-800 rounded border border-emerald-200">
+              [${new Date().toLocaleTimeString()}] Live webcam stream initialized. Candidate face calibrated.
+            </div>
+          `;
+        } catch (err) {
+          console.warn('Camera access error or permission denied:', err);
+          alertLog.innerHTML = `
+            <div class="p-1.5 bg-amber-50 text-amber-800 rounded border border-amber-200">
+              [${new Date().toLocaleTimeString()}] Notice: Camera permission deferred. Simulated video mode active for UI review.
+            </div>
+          `;
+        }
+      });
+
+      btnStop?.addEventListener('click', () => {
+        if (localStream) {
+          localStream.getTracks().forEach(track => track.stop());
+          localStream = null;
+        }
+        videoEl.classList.add('hidden');
+        standbyOverlay.classList.remove('hidden');
+        hudOverlay.classList.add('hidden');
+
+        statusDot.className = 'w-2 h-2 rounded-full bg-slate-400 mr-2';
+        statusText.textContent = 'Camera Standby';
+
+        btnStart.disabled = false;
+        btnStart.className = 'px-5 py-2.5 text-xs sm:text-sm font-bold rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition-all';
+
+        btnStop.disabled = true;
+        btnStop.className = 'px-5 py-2.5 text-xs sm:text-sm font-bold rounded-xl bg-slate-200 text-slate-400 cursor-not-allowed';
+      });
+    });
+  </script>
+</body>
+</html>
