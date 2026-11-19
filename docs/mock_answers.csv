@@ -1,0 +1,17 @@
+id,student,answer,expected_note
+1,S01,"Overfitting happens when a model learns the training data too closely, including noise, so it performs well on training data but poorly on new unseen data. It can be reduced by using more data, regularization, dropout, or early stopping.",Original answer A
+2,S02,"When a model memorizes the training data and its noise instead of learning general patterns, it is overfitting. It does great on training data but badly on unseen data. We can reduce it with more training data, regularization, dropout and early stopping.",COPY of 1 (close paraphrase) - expect HIGH
+3,S03,"Overfitting is when a machine learning model fits the training set so tightly that it also captures random noise, which hurts its accuracy on new data. To lessen it, one can gather more data, apply regularization, use dropout, or stop training early.",PARAPHRASE of 1 - expect HIGH/MEDIUM
+4,S04,"A model overfits when it becomes too complex for the data. Techniques like cross-validation, pruning decision trees, and simplifying the model architecture help to prevent this problem.",Same topic but different content - expect MEDIUM at most
+5,S05,"Underfitting is the opposite problem, where a model is too simple to capture the pattern in the data. It gives poor results on both training and test sets, and can be fixed by using a more complex model.",Related topic but a different concept - expect LOW/MEDIUM
+6,S06,"The mitochondria is the organelle that produces most of the cell's energy in the form of ATP through cellular respiration.",Unrelated topic - expect LOW
+7,S07,"A relational database stores data in tables made of rows and columns, and SQL is used to query and manage that data.",Unrelated topic - expect LOW
+8,S08,"Gradient descent is an optimization algorithm that updates model weights step by step in the direction that reduces the loss function. The learning rate controls the size of each step.",Different ML topic - expect LOW/MEDIUM
+9,S09,"Overfitting is when training accuracy is high but test accuracy is low.",Short answer (12 words) but valid length - should be scored
+10,S10,"Model memorizes data.",Too short (3 words) - should be SKIPPED
+11,S11,"Not sure about this.",Too short (4 words) - should be SKIPPED
+12,S12,"Use dropout.",Too short (2 words) - should be SKIPPED
+13,S13,"Regularization methods such as L1 and L2 add a penalty term to the loss function that discourages large weights, which keeps the model simpler and reduces overfitting. Dropout and early stopping also help.",Overlaps partly with 1 (shares ideas) - expect MEDIUM
+14,S14,"Photosynthesis is the process by which green plants use sunlight, water and carbon dioxide to produce glucose and oxygen.",Unrelated topic - expect LOW
+15,S15,"The French Revolution began in 1789 and led to the end of the monarchy and the rise of new political ideas about citizenship and rights.",Unrelated topic - expect LOW
+16,S16,"In machine learning, a model overfits if it learns noise from the training set and fails to generalise to new examples. Collecting more data, using regularisation, dropout layers and early stopping are common ways to reduce it.",COPY of 1 (another paraphrase, UK spelling) - expect HIGH
