@@ -1,0 +1,43 @@
+Loaded 16 answers. Minimum words: 8
+
+SKIPPED (too short): 3
+  id 10 (S10) - 3 words
+  id 11 (S11) - 4 words
+  id 12 (S12) - 2 words
+
+RANKED PAIRS (78 total) - top 20
+ score  level   pair
+ 0.886  HIGH     1 (S01) vs  2 (S02)
+ 0.817  MEDIUM   1 (S01) vs  3 (S03)
+ 0.805  MEDIUM   2 (S02) vs  3 (S03)
+ 0.778  MEDIUM  13 (S13) vs 16 (S16)
+ 0.775  MEDIUM   2 (S02) vs 16 (S16)
+ 0.761  MEDIUM   3 (S03) vs 16 (S16)
+ 0.736  MEDIUM   3 (S03) vs 13 (S13)
+ 0.711  MEDIUM   1 (S01) vs 16 (S16)
+ 0.697  MEDIUM   2 (S02) vs  5 (S05)
+ 0.660  MEDIUM   2 (S02) vs 13 (S13)
+ 0.639  MEDIUM   1 (S01) vs 13 (S13)
+ 0.629  MEDIUM   1 (S01) vs  5 (S05)
+ 0.608  MEDIUM   4 (S04) vs  5 (S05)
+ 0.598  MEDIUM   5 (S05) vs  9 (S09)
+ 0.597  MEDIUM   3 (S03) vs  5 (S05)
+ 0.591  MEDIUM   3 (S03) vs  4 (S04)
+ 0.588  MEDIUM   2 (S02) vs  4 (S04)
+ 0.570  MEDIUM   4 (S04) vs 16 (S16)
+ 0.554  MEDIUM   1 (S01) vs  9 (S09)
+ 0.543  MEDIUM   5 (S05) vs 16 (S16)
+
+Pairs involving answer 1 (the original), best match first:
+ 0.886  HIGH     1 vs  2
+ 0.817  MEDIUM   1 vs  3
+ 0.711  MEDIUM   1 vs 16
+ 0.639  MEDIUM   1 vs 13
+ 0.629  MEDIUM   1 vs  5
+ 0.554  MEDIUM   1 vs  9
+ 0.512  MEDIUM   1 vs  4
+ 0.117  LOW      1 vs  8
+ 0.011  LOW      1 vs  6
+ 0.001  LOW      1 vs 15
+-0.030  LOW      1 vs 14
+-0.078  LOW      1 vs  7
